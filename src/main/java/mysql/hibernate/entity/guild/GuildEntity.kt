@@ -138,6 +138,9 @@ class GuildEntity(key: String) : HibernateEntity(), GuildAsset, LanguageAsset {
     @NotFound(action = NotFoundAction.IGNORE)
     var channelLocks: MutableMap<Long, ChannelLockEntity> = mutableMapOf()
 
+    @ElementCollection
+    val customRoles = mutableMapOf<Long, Long>()
+
 
     constructor() : this("0")
 

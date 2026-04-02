@@ -31,6 +31,18 @@ public class ComponentsUtil {
     }
 
     public static MessageComponentTree createCommandComponentTree(Command command, Collection<ContainerChildComponent> components) {
+        return createCommandComponentTree(command, components, DEFAULT_CONTAINER_COLOR);
+    }
+
+    public static MessageComponentTree createCommandComponentTreeError(Command command, ContainerChildComponent component) {
+        return createCommandComponentTreeError(command, List.of(component));
+    }
+
+    public static MessageComponentTree createCommandComponentTreeError(Command command, Collection<ContainerChildComponent> components) {
+        return createCommandComponentTree(command, components, FAILED_CONTAINER_COLOR);
+    }
+
+    public static MessageComponentTree createCommandComponentTree(Command command, Collection<ContainerChildComponent> components, Color accentColor) {
         ArrayList<ContainerChildComponent> innerComponents = new ArrayList<>();
         innerComponents.add(TextDisplay.of("### " + command.getCommandProperties().emoji() + " " + command.getCommandLanguage().getTitle()));
         command.getUsername().ifPresent(username ->
@@ -41,7 +53,7 @@ public class ComponentsUtil {
 
         return MessageComponentTree.of(
                 Container.of(innerComponents)
-                        .withAccentColor(DEFAULT_CONTAINER_COLOR)
+                        .withAccentColor(accentColor)
         );
     }
 
