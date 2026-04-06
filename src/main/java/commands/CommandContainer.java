@@ -106,6 +106,7 @@ public class CommandContainer {
         commandList.add(SuggestionCommand.class);
         commandList.add(CustomCommand.class);
         commandList.add(SetNSFWCommand.class);
+        commandList.add(CustomRoleAddCommand.class);
 
         //MODERATION
         commandList.add(ModSettingsCommand.class);

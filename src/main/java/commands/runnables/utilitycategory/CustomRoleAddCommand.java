@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.components.textdisplay.TextDisplay;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.requests.restaction.RoleAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,17 +23,17 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @CommandProperties(
-        trigger = "addcustomrole",
+        trigger = "customroleadd",
         userGuildPermissions = Permission.MANAGE_ROLES,
         botGuildPermissions = Permission.MANAGE_ROLES,
         emoji = "\uD83D\uDD16",
         executableWithoutArgs = false,
         requiresFullMemberCache = true,
-        aliases = { "assigncustomrole", "createcustomrole" }
+        aliases = { "customroleassign", "customrolecreate" }
 )
-public class AddCustomRoleCommand extends Command {
+public class CustomRoleAddCommand extends Command {
 
-    public AddCustomRoleCommand(Locale locale, String prefix) {
+    public CustomRoleAddCommand(Locale locale, String prefix) {
         super(locale, prefix);
     }
 
@@ -64,10 +63,15 @@ public class AddCustomRoleCommand extends Command {
             return false;
         }
 
-        RoleAction roleAction = event.getGuild().createRole();
         String roleName = getString("new_role_name", targetMember.getEffectiveName());
-        roleAction = roleAction.setName(StringUtil.shortenString(roleName, 100));
-        Role role = roleAction.complete();
+        Role role = event.getGuild().createRole()
+                .setName(StringUtil.shortenString(roleName, 100))
+                .setPermissions()
+                .reason(getCommandLanguage().getTitle())
+                .complete();
+        event.getGuild().addRoleToMember(targetMember, role)
+                .reason(getCommandLanguage().getTitle())
+                .complete();
 
         GuildEntity guildEntity = getGuildEntity();
         guildEntity.beginTransaction();
@@ -76,7 +80,7 @@ public class AddCustomRoleCommand extends Command {
         guildEntity.commitTransaction();
 
         TextDisplay content = TextDisplay.of(getString("success", role.getName(), targetMember.getEffectiveName()));
-        drawMessageNew(ComponentsUtil.createCommandComponentTreeError(this, content))
+        drawMessageNew(ComponentsUtil.createCommandComponentTree(this, content))
                 .exceptionally(ExceptionLogger.get());
         return true;
     }
