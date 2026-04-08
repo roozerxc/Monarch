@@ -20,6 +20,7 @@ import net.dv8tion.jda.api.interactions.modals.ModalMapping;
 import net.dv8tion.jda.api.modals.Modal;
 import org.glassfish.jersey.internal.util.Producer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -85,7 +86,7 @@ public interface ActionComponentGenerator {
         });
     }
 
-    default Modal setStringModal(String property, String value, String placeholder, int minLength, int maxLength, ModalStringAction consumer) {
+    default Modal setStringModal(String property, String value, String placeholder, int minLength, int maxLength, ModalStringAction consumer, ModalTopLevelComponent... additionalComponents) {
         TextInput textInput = TextInput.create("_", TextInputStyle.SHORT)
                 .setValue(value)
                 .setPlaceholder(placeholder)
@@ -93,7 +94,11 @@ public interface ActionComponentGenerator {
                 .setRequired(minLength > 0)
                 .build();
 
-        return modal(property, List.of(Label.of(property, textInput)), e -> {
+        ArrayList<ModalTopLevelComponent> components = new ArrayList<>();
+        components.add(Label.of(property, textInput));
+        components.addAll(List.of(additionalComponents));
+
+        return modal(property, components, e -> {
             ModalMapping newValue = e.getValue("_");
             consumer.accept(newValue != null ? newValue.getAsString() : null);
         });

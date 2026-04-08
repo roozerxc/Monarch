@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
 
+import java.awt.*;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -464,6 +465,10 @@ public final class StringUtil {
     public static String addWrittenByServerStaffDisclaimer(String text, Locale locale, Guild guild, Integer characterLimit) {
         String disclaimer = "\n-# " +  TextManager.getString(locale, TextManager.GENERAL, "serverstaff_text_server", StringUtil.escapeMarkdown(guild.getName()));
         return (characterLimit != null ? shortenString(text, characterLimit - disclaimer.length()) : text) + disclaimer;
+    }
+
+    public static String colorToHex(Color color) {
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
 
 }

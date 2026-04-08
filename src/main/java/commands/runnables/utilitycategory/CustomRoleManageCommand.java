@@ -4,10 +4,12 @@ import commands.CommandEvent;
 import commands.listeners.CommandProperties;
 import commands.runnables.ComponentMenuAbstract;
 import constants.Emojis;
+import constants.LogStatus;
 import core.ExceptionLogger;
 import core.TextManager;
 import core.atomicassets.AtomicRole;
 import core.utils.ComponentsUtil;
+import core.utils.StringUtil;
 import modules.CustomRoles;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.components.buttons.Button;
@@ -15,12 +17,15 @@ import net.dv8tion.jda.api.components.container.ContainerChildComponent;
 import net.dv8tion.jda.api.components.section.Section;
 import net.dv8tion.jda.api.components.textdisplay.TextDisplay;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.modals.Modal;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @CommandProperties(
         trigger = "customrolemanage",
@@ -39,7 +44,8 @@ public class CustomRoleManageCommand extends ComponentMenuAbstract {
     @Override
     public boolean onTrigger(@NotNull CommandEvent event, @NotNull String args) {
         CustomRoles.cleanUp(getGuildEntity(), event.getGuild());
-        atomicRole = new AtomicRole(event.getGuild().getIdLong(), getGuildEntity().getCustomRoles().get(event.getUser().getIdLong()));
+        long roleId = Objects.requireNonNullElse(getGuildEntity().getCustomRoles().get(event.getUser().getIdLong()), 0L);
+        atomicRole = new AtomicRole(event.getGuild().getIdLong(), roleId);
         if (atomicRole.get().isEmpty()) {
             TextDisplay content = TextDisplay.of(getString("error_no_role"));
             drawMessageNew(ComponentsUtil.createCommandComponentTreeError(this, content))
@@ -57,19 +63,61 @@ public class CustomRoleManageCommand extends ComponentMenuAbstract {
         ArrayList<ContainerChildComponent> components = new ArrayList<>();
 
         Button nameButton = buttonSecondary(Emojis.MENU_EDIT, e -> {
-            return true;
+            Modal modal = setStringModal(
+                    getString("root_name"),
+                    atomicRole.get().map(Role::getName).orElse(null),
+                    null,
+                    1,
+                    100,
+                    newName -> {
+                        atomicRole.get().ifPresent(role -> {
+                            role.getManager()
+                                    .setName(newName)
+                                    .reason(getCommandLanguage().getTitle())
+                                    .complete();
+                        });
+                    });
+            e.replyModal(modal).queue();
+            return false;
         });
-        Section nameSection = Section.of(nameButton, TextDisplay.of(getString("root_name", atomicRole.getName(getLocale()))));
+        Section nameSection = Section.of(nameButton, TextDisplay.of(getString("root_header", getString("root_name"), atomicRole.getName(getLocale()))));
         components.add(nameSection);
 
         String colorText = atomicRole.get()
                 .map(role -> role.getColors().getPrimary())
-                .map(color -> String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()))
+                .map(StringUtil::colorToHex)
                 .orElse(TextManager.getString(getLocale(), TextManager.GENERAL, "notset"));
         Button colorButton = buttonSecondary(Emojis.MENU_EDIT, e -> {
-            return true;
+            Modal modal = setStringModal(
+                    getString("root_color"),
+                    atomicRole.get().map(r -> r.getColors().getPrimary()).map(StringUtil::colorToHex).orElse(null),
+                    null,
+                    6,
+                    7,
+                    newColorHex -> {
+                        Color color;
+                        try {
+                            if (!newColorHex.startsWith("#")) {
+                                newColorHex = "#" + newColorHex;
+                            }
+                            color = Color.decode(newColorHex);
+                        } catch (Throwable throwable) {
+                            setLog(LogStatus.FAILURE, getString("error_invalid_color"));
+                            return;
+                        }
+                        Color finalColor = color;
+                        atomicRole.get().ifPresent(role -> {
+                            role.getManager()
+                                    .setColor(finalColor)
+                                    .reason(getCommandLanguage().getTitle())
+                                    .complete();
+                        });
+                    },
+                    TextDisplay.of(getString("root_color_picker", "https://www.webfx.com/web-design/color-picker/")));
+            e.replyModal(modal).queue();
+            return false;
         });
-        Section colorSection = Section.of(colorButton, TextDisplay.of(getString("root_color", colorText)));
+        Section colorSection = Section.of(colorButton, TextDisplay.of(getString("root_header", getString("root_color"), colorText)));
         components.add(colorSection);
 
         return components;
