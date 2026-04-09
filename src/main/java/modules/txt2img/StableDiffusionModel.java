@@ -9,23 +9,6 @@ import java.util.function.Function;
 
 public enum StableDiffusionModel {
 
-    RILLUSM(
-            "gevo8ndzux6u9i",
-            12000,
-            false,
-            Set.of(),
-            "extremely detailed, masterpiece, best quality, amazing quality, photorealistic, ",
-            "bad face quality, undetailed face, blurry, bad anatomy, bad fingers, bad hands, bad quality, worst quality, worst detail, (digital art, cgi, 3d, render, drawing, graphics, anime, cartoon), ",
-            params -> new JSONObject()
-                    .put("width", params.aspectRatio.getWidth())
-                    .put("height", params.aspectRatio.getHeight())
-                    .put("cfg_scale", 5)
-                    .put("steps", 30)
-                    .put("batch_size", params.images)
-                    .put("sampler_name", "Euler a")
-                    .put("override_settings", new JSONObject().put("CLIP_stop_at_last_layers", 1))
-    ),
-
     ILUSTMIX(
             "idpk0o19b3n6ex",
             12000,
@@ -126,6 +109,23 @@ public enum StableDiffusionModel {
                     .put("batch_size", params.images)
                     .put("sampler_name", "Euler a")
                     .put("override_settings", new JSONObject().put("CLIP_stop_at_last_layers", 2))
+    ),
+
+    RILLUSM(
+            "gevo8ndzux6u9i",
+            12000,
+            false,
+            Set.of(Txt2HentaiCommand.class),
+            "extremely detailed, masterpiece, best quality, amazing quality, photorealistic, ",
+            "bad face quality, undetailed face, blurry, bad anatomy, bad fingers, bad hands, bad quality, worst quality, worst detail, (digital art, cgi, 3d, render, drawing, graphics, anime, cartoon), ",
+            params -> new JSONObject()
+                    .put("width", params.aspectRatio.getWidth())
+                    .put("height", params.aspectRatio.getHeight())
+                    .put("cfg_scale", 5)
+                    .put("steps", 30)
+                    .put("batch_size", params.images)
+                    .put("sampler_name", "Euler a")
+                    .put("override_settings", new JSONObject().put("CLIP_stop_at_last_layers", 1))
     );
 
     private final String modelId;

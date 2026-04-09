@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 @Slash(
     name = "customrole",
     descriptionCategory = [Category.UTILITY],
-    descriptionKey = "customrole_description",
+    descriptionKey = "customroleadd_description",
     commandAssociations = [CustomRoleAddCommand::class, CustomRoleManageCommand::class],
 )
 class CustomRoleAdapter : SlashAdapter() {
