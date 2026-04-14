@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.UnicodeEmoji;
+import net.dv8tion.jda.api.utils.ImageFormat;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -85,7 +86,7 @@ public class EmojiUtil {
             } else if (emoji instanceof CustomEmoji) {
                 LocalFile localFile = new LocalFile(LocalFile.Directory.CDN, "emoji_cache/" + ((CustomEmoji) emoji).getId() + ".png");
                 if (!localFile.exists()) {
-                    ((CustomEmoji) emoji).getImage().downloadToFile(localFile, 32).get();
+                    ((CustomEmoji) emoji).getImage(ImageFormat.PNG).downloadToFile(localFile, 32).get();
                 }
                 return ImageIO.read(localFile);
             }

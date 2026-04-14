@@ -1,5 +1,14 @@
 package modules.graphics;
 
+import core.AttributedStringGenerator;
+import core.LocalFile;
+import core.MainLogger;
+import core.utils.FutureUtil;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
@@ -11,14 +20,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.AttributedCharacterIterator;
 import java.util.concurrent.CompletableFuture;
-import javax.imageio.ImageIO;
-import core.AttributedStringGenerator;
-import core.LocalFile;
-import core.MainLogger;
-import core.utils.FutureUtil;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 
 public class WelcomeGraphics {
 

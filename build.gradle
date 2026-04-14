@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:6.2.1'
+    implementation 'net.dv8tion:JDA:6.3.2'
     implementation 'mysql:mysql-connector-java:8.0.23'
     implementation 'org.hibernate.ogm:hibernate-ogm-mongodb:5.4.1.Final'
     implementation 'org.jboss.jbossts:jbossjta:4.16.6.Final'
@@ -44,6 +44,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.0-RC2'
     implementation 'com.github.Aninoss:lawliet-dashboard-components:61230f86c5'
     implementation "com.deepl.api:deepl-java:1.6.0"
+    implementation "com.twelvemonkeys.imageio:imageio-webp:3.13.1"
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
