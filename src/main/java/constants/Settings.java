@@ -11,29 +11,20 @@ public interface Settings {
     int FISHERY_SHARES_FEES = 4;
     int COOLDOWN_TIME_SEC = 30;
     int COOLDOWN_MAX_ALLOWED = 5;
-    long[] PATREON_ROLE_IDS = { 762322081840234506L, 703303395867492453L, 704721905453629481L, 704721939968688249L, 706143381784494132L, 706143478085582898L };
-    Color PREMIUM_COLOR = new Color(42, 127, 239);
+    long[] PATREON_ROLE_IDS = { };
+    Color PREMIUM_COLOR = new Color(0, 0, 255);
     int FISHERY_DESPAWN_MINUTES = 1;
     int FISHERY_POWERUP_TIMEOUT_MINUTES = 5;
 
     String[] NSFW_FILTERS = {
-            "loli", "shota", "lolicon", "little_girl", "shotacon", "oneshota", "cp", "cub", "children",
-            "child", "kid", "kids", "teen", "teenager", "young", "younger", "underage", "under_age", "cunny",
-            "flat_chest", "flat_chested", "petite", "small_girl", "small_boy", "minor", // minors
+            // The MOST obvious should be added in the server config, look at
+            // the commit history if you do not want to see cursed shit.
 
-            "tagme", // unsafe
-
-            "bestiality", "beastiality", "zoophilia", // animals
-
-            "gore", "guro", "dismemberment", "death_by", "decapitation", "eye_socket", "necrophilia", "rape", "raped",
-            "raping", "gangrape", "gross", "bruise", "bruised", "bruises", "asphyxiation", "strangling", "strangled", "torture",
-            "tortured", "corpse", "suicide", "deceased", "snuff", "meat_girls", "cannibalism", // violence
-
-            "celebrity", "celeb", "pokimane", "onlyfans", // non-consensual publications
-
-            "adolf_hitler" // politically incorrect
+            // By default this array is empty for Monarch...
     };
 
-    String[] NSFW_STRICT_FILTERS = { "death" };
+    String[] NSFW_STRICT_FILTERS = {
+            // Ditto with NSFW_FILTERS.
+    };
 
 }
